@@ -1,0 +1,29 @@
+[user]
+	email = jordan.griege@rackspace.com
+	name = megalord
+[credential]
+	helper = osxkeychain
+[alias]
+	co = checkout
+	st = status
+	br = branch
+  cm = commit -m
+  cp = cherry-pick
+  ru = "!f() { branch=$1; branch=${branch:=master};\
+    git checkout $branch && git fetch upstream $branch && git rebase upstream/$branch && git push origin $branch; }; f"
+  sh = "!f() { if [ "$1" == '-s' ]; then git stash save $2;\
+    elif [ "$1" == '-p' ]; then git stash pop stash@{$2};\
+    else git stash "$@"; fi; }; f"
+
+[core]
+	excludesfile = /Users/jord7580/.gitignore_global
+	editor = vim
+[push]
+	default = current
+# Use https instead of git and git+ssh
+[url "https://github.com/"]
+  insteadOf = git://github.com/
+[url "https://github.com/"]
+  insteadOf = git@github.com:
+#[url "https://"]
+#	insteadOf = git://
