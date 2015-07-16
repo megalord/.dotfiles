@@ -78,6 +78,7 @@ let g:niji_matching_filetypes = ['lisp', 'asd', 'racket']
 
 nmap <Leader>n :NERDTreeToggle<CR>
 nmap <Leader>o :set paste!<CR>
+nmap <Leader>b :buffers<CR>:buffer<Space>
 
 "vmap <Leader>e <Plug>SendSelectionToTmux
 "nmap <Leader>e <Plug>NormalModeSendToTmux
@@ -101,6 +102,7 @@ if has('nvim')
 
   vmap <Leader>e y<C-l>p
   nmap <Leader>e vipy<C-l>p
-  nmap <Leader>t ;vs term://zsh<CR>
+  nnoremap <Leader>t :e term://zsh<CR>
+  nnoremap <Leader>vt :vs term://zsh<CR>
   nmap <Leader>l :let @r = '(enter! ' . '"' . expand("%") . '")'<CR><C-l>"rpa<CR>
 endif
