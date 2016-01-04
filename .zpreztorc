@@ -93,6 +93,12 @@ zstyle ':prezto:module:history-substring-search' color 'yes'
 zstyle ':prezto:module:prompt' theme 'steeef'
 
 #
+# Python
+#
+
+zstyle ':prezto:module:python:info:virtualenv' format 'virtualenv:%v'
+
+#
 # Ruby
 #
 

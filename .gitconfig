@@ -1,8 +1,6 @@
 [user]
 	email = jordan.griege@rackspace.com
 	name = megalord
-[credential]
-	helper = osxkeychain
 [alias]
 	co = checkout
 	st = status
@@ -20,10 +18,7 @@
 	editor = vim
 [push]
 	default = current
-# Use https instead of git and git+ssh
-[url "https://github.com/"]
-  insteadOf = git://github.com/
-[url "https://github.com/"]
-  insteadOf = git@github.com:
-#[url "https://"]
-#	insteadOf = git://
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+[url "ssh://git@github.com/"]
+	insteadOf = git://github.com/
