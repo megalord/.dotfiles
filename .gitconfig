@@ -7,18 +7,23 @@
 	br = branch
   cm = commit -m
   cp = cherry-pick
+  dfs = "!f() { git diff --color | diff-highlight | diff-so-fancy | less --tabs=4 -RFX; }; f"
   ru = "!f() { branch=$1; branch=${branch:=master};\
     git checkout $branch && git fetch upstream $branch && git rebase upstream/$branch && git push origin $branch; }; f"
   sh = "!f() { if [ "$1" == '-s' ]; then git stash save $2;\
     elif [ "$1" == '-p' ]; then git stash pop stash@{$2};\
     else git stash "$@"; fi; }; f"
+  pr = !git fetch -fu ${2:-upstream} refs/pull/$1/head:$1 && :
 
 [core]
 	excludesfile = /Users/jord7580/.gitignore_global
-	editor = vim
+	editor = nvim
+        pager = diff-highlight | diff-so-fancy | less --tabs=4 -RFX
 [push]
 	default = current
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
 [url "ssh://git@github.com/"]
+	insteadOf = git://github.com/
+[url "https://github.com/"]
 	insteadOf = git://github.com/

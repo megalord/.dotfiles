@@ -2,7 +2,10 @@ set t_Co=256
 
 set nocompatible              " be iMproved, required
 
-call plug#begin('~/.vim/bundle')
+" Look for rplugins
+let &rtp = &rtp.','.expand('~').'/.nvim'
+
+call plug#begin('~/.nvim/bundle')
 " Utils
 Plug 'scrooloose/nerdtree'
 Plug 'kien/ctrlp.vim'
@@ -10,45 +13,56 @@ Plug 'bling/vim-airline'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'docunext/closetag.vim'
 Plug 'godlygeek/tabular'
-Plug 'Shougo/vimproc.vim'
 
-" Language specific
+" JS
 Plug 'kchmck/vim-coffee-script'
 Plug 'pangloss/vim-javascript'
-Plug 'tpope/vim-rails'
+Plug 'raichoo/purescript-vim'
+Plug 'FrigoEU/psc-ide-vim'
+
+" Web
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
-Plug 'derekwyatt/vim-scala'
-Plug 'hdima/python-syntax'
+
+" Haskell
 Plug 'neovimhaskell/haskell-vim'
 Plug 'Twinside/vim-hoogle'
 Plug 'eagletmt/ghcmod-vim'
 
 " Lisps
 Plug 'wlangstroth/vim-racket'
-Plug 'spinningarrow/vim-niji'
-"Plug 'jgdavey/tslime.vim'
 Plug 'paredit.vim'
+
+" Other langs
+Plug 'tpope/vim-rails'
+Plug 'derekwyatt/vim-scala'
+Plug 'hdima/python-syntax'
+"Plug 'klen/python-mode'
+
+" rplugins
+Plug 'neovim/node-host'
 
 " Style
 Plug 'tomasr/molokai'
-
-" lulz
-Plug 'mattn/flappyvird-vim'
+Plug 'luochen1990/rainbow'
 
 call plug#end()
 
 
+
 au Bufread,BufNewFile *.asd   setfiletype lisp
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|\.git|vendor|coverage|report|compiled|dist|tmp)$'
+au Bufread,BufNewFile *.raml   setfiletype yaml
+au Filetype javascript setl et tabstop=4 shiftwidth=4
 
 set mouse=
 
+set cursorline
 set modeline
 set ls=2
 
 colorscheme molokai
-highlight Normal ctermfg=grey ctermbg=none
+hi String ctermfg=228
+hi Comment ctermfg=245
 set nohlsearch
 
 set smartindent
@@ -57,7 +71,6 @@ set tabstop=2
 set shiftwidth=2
 set backspace=2
 
-"au Filetype javascript setl et tabstop=4 shiftwidth=4
 
 set ruler
 
@@ -73,16 +86,15 @@ let mapleader=","
 
 let g:ctrlp_map = '<leader>f'
 let g:ctrlp_working_path_mode = 0
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|bower_components|\.git|vendor|coverage|report|compiled|dist|tmp|output)$'
 
 let g:paredit_electric_return = 0
 
-let g:niji_matching_filetypes = ['lisp', 'asd', 'racket']
-
-"let python_highlight_all = 1
+let g:rainbow_active = 1
 
 nmap <Leader>n :NERDTreeToggle<CR>
 nmap <Leader>o :set paste!<CR>
-nnoremap <Leader>b :buffer<Space>term<Tab>
+nnoremap <Leader>b :buffer<Space>term
 nnoremap <Leader>g :CtrlPTag<CR>
 
 nnoremap <C-h> <C-w>h
@@ -124,6 +136,17 @@ if has('nvim')
   nmap <Leader>l :let @r = '(enter! ' . '"' . expand("%") . '")'<CR><C-l>"rpa<CR>
 endif
 
+function! s:Colors()
+  let num = 255
+  execute 'vnew'
+  while num >= 0
+      exec 'hi col_'.num.' ctermbg='.num.' ctermfg=white'
+      exec 'syn match col_'.num.' "ctermbg='.num.':...." containedIn=ALL'
+      call append(0, 'ctermbg='.num.':....')
+      let num = num - 1
+  endwhile
+endfunction
+command! -nargs=0 Colors call s:Colors()
 
 augroup jump_to_tags
   autocmd!
@@ -168,3 +191,16 @@ augroup jump_to_tags
 
   command! -nargs=0 Pulse call s:Pulse()
 augroup END
+
+function! s:CafeLogs()
+  execute '?Detailed logs'
+  normal f/
+  normal vj$hy
+  execute 'new'
+  normal pJx
+  normal 0y$
+  execute 'e! ' . @"
+  "normal Go
+endfunction
+
+command! -nargs=0 CafeLogs call s:CafeLogs()
