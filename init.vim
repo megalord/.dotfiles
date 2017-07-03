@@ -13,10 +13,12 @@ Plug 'bling/vim-airline'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'docunext/closetag.vim'
 Plug 'godlygeek/tabular'
+Plug 'mileszs/ack.vim'
 
 " JS
 Plug 'kchmck/vim-coffee-script'
-Plug 'pangloss/vim-javascript'
+Plug 'jelera/vim-javascript-syntax'
+Plug 'leafgarland/typescript-vim'
 Plug 'raichoo/purescript-vim'
 Plug 'FrigoEU/psc-ide-vim'
 
@@ -37,13 +39,15 @@ Plug 'paredit.vim'
 Plug 'tpope/vim-rails'
 Plug 'derekwyatt/vim-scala'
 Plug 'hdima/python-syntax'
-"Plug 'klen/python-mode'
+Plug 'fatih/vim-go'
 
 " rplugins
+Plug 'tweekmonster/nvim-api-viewer'
 Plug 'neovim/node-host'
 
 " Style
 Plug 'tomasr/molokai'
+Plug 'liuchengxu/space-vim-dark'
 Plug 'luochen1990/rainbow'
 
 call plug#end()
@@ -52,7 +56,9 @@ call plug#end()
 
 au Bufread,BufNewFile *.asd   setfiletype lisp
 au Bufread,BufNewFile *.raml   setfiletype yaml
-au Filetype javascript setl et tabstop=4 shiftwidth=4
+au Bufread,BufNewFile Jenkinsfile   setfiletype groovy
+au Bufread,BufNewFile Dockerfile.*   setfiletype dockerfile
+"au Filetype javascript setl et tabstop=4 shiftwidth=4
 
 set mouse=
 
@@ -60,9 +66,9 @@ set cursorline
 set modeline
 set ls=2
 
-colorscheme molokai
-hi String ctermfg=228
-hi Comment ctermfg=245
+colorscheme space-vim-dark " Modify the plugin source to use ctermbg 233 on line 83
+hi Comment cterm=italic
+hi Normal guibg=None ctermbg=None
 set nohlsearch
 
 set smartindent
@@ -105,6 +111,7 @@ nnoremap ; :
 inoremap jk <ESC>
 
 
+
 " Haskell helpers
 
 " Show types in completion suggestions
@@ -134,6 +141,8 @@ if has('nvim')
   nnoremap <Leader>t :e term://zsh<CR>
   nnoremap <Leader>vt :vs term://zsh<CR>
   nmap <Leader>l :let @r = '(enter! ' . '"' . expand("%") . '")'<CR><C-l>"rpa<CR>
+
+  set inccommand=nosplit
 endif
 
 function! s:Colors()

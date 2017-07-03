@@ -1,10 +1,3 @@
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
@@ -16,17 +9,23 @@ ZSH_HIGHLIGHT_STYLES[globbing]=none
 # display command's exit code
 RPROMPT='[%?]'
 
+bindkey "^R" history-incremental-search-backward
+
 # fixes Emacs' terminal emulator
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export TERM=xterm-256color
 
-export PATH="$PATH:$HOME/.local/bin"
+export GOPATH="$HOME/.go"
+export PATH="$PATH:$HOME/.local/bin:$GOPATH/bin"
 
 export EDITOR=nvim
 
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
+oc-project () {
+  open $(oc project | awk -F\" '{print $4 "/console/project/" $2}')
+}
 
 alias d='docker'
 alias dm='docker-machine'
@@ -71,42 +70,6 @@ alias xc='xargs curl'
 
 alias rm-pyc='find . -name "*.pyc" -exec rm -rf {} \;'
 
-no-quotes () {
-  sed 's/\"//g'
-}
-
-cred-pass () {
-  jq '.credential.password'
-}
-
-ss-local-user () {
-  soil pwsafe production GET /projects/1519/credentials/75357 | xc -H 'Accept: application/json' | cred-pass | no-quotes
-}
-
-ss-prod-db-read () {
-  soil pwsafe production GET /projects/1651/credentials/9836 | xc -H 'Accept: application/json' | cred-pass | no-quotes
-}
-
-ss-stag-db-read () {
-  soil pwsafe production GET /projects/1349/credentials/9200 | xc -H 'Accept: application/json' | cred-pass | no-quotes
-}
-
-ctk-result () {
-  jq '.[0] | .result[0]'
-}
-
-lookup-sku () {
-  soil ctk production post / | xc --data "[{\"class\":\"Product.Product\",\"load_arg\":$1,\"attributes\":[\"active\",\"name\",\"description\"]}]" | ctk-result
-}
-
-lookup-device () {
-  soil ctk production post / | xc --data "[{\"class\":\"Computer.Computer\",\"load_arg\":$1,\"attributes\":[\"number\",\"name\",\"type\",\"customer_number.customer_number\",\"platform_type\",\"platform_model\",\"datacenter.symbol\",\"account.segment.name\",\"status.name\",\"platform.product_sku.sku\",\"parts.sku_number\",\"modified\",\"children\",\"parents\"]}]" | ctk-result
-}
-
-maestro-logs () {
-  soil maestro staging get /environments/$1/logs | xc -k | jq '.[] | to_entries[] | .key + .value'
-}
-
 upstream-url () {
   git remote -v | grep upstream | sed -n '2 p' | sed -e 's/.*@\(.*\)\.git.*/\1/' -e 's/:/\//' -e 's/^/https:\/\//'
 }
@@ -125,3 +88,13 @@ new-session () {
   tmux send-keys -t $1:0 'nvim' C-m
   tmux -2 attach-session -t $1
 }
+
+gostdlib () {
+  cd /usr/local/Cellar/go/1.8/libexec
+}
+
+goimports () {
+  go list -f '{{join .Imports "\n"}}' $@ | sort | uniq
+}
+
+source ~/.raxrc
