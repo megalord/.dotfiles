@@ -53,19 +53,21 @@ Plug 'luochen1990/rainbow'
 call plug#end()
 
 
-
-au Bufread,BufNewFile *.asd   setfiletype lisp
-au Bufread,BufNewFile *.raml   setfiletype yaml
-au Bufread,BufNewFile Jenkinsfile   setfiletype groovy
-au Bufread,BufNewFile Dockerfile.*   setfiletype dockerfile
+au Bufread,BufNewFile *.asd        setfiletype lisp
+au Bufread,BufNewFile *.raml       setfiletype yaml
+au Bufread,BufNewFile Jenkinsfile*  setfiletype groovy
+au Bufread,BufNewFile Dockerfile.* setfiletype dockerfile
+au Bufread,BufNewFile *.sith       setfiletype c
 "au Filetype javascript setl et tabstop=4 shiftwidth=4
 
 set mouse=
 
+set nonumber
 set cursorline
 set modeline
 set ls=2
 
+hi Normal ctermbg=233
 colorscheme space-vim-dark " Modify the plugin source to use ctermbg 233 on line 83
 hi Comment cterm=italic
 hi Normal guibg=None ctermbg=None
@@ -76,6 +78,7 @@ set expandtab
 set tabstop=2
 set shiftwidth=2
 set backspace=2
+set tabline=%!MyTabLine()
 
 
 set ruler
@@ -90,14 +93,16 @@ set scrolloff=5
 
 let mapleader=","
 
+set wildignore+=*.o
 let g:ctrlp_map = '<leader>f'
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|bower_components|\.git|vendor|coverage|report|compiled|dist|tmp|output)$'
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|bower_components|\.git|vendor|coverage|report|compiled|dist|tmp|output|\.o)$'
 
 let g:paredit_electric_return = 0
 
 let g:rainbow_active = 1
 
+nmap <Leader>d :!date<CR>
 nmap <Leader>n :NERDTreeToggle<CR>
 nmap <Leader>o :set paste!<CR>
 nnoremap <Leader>b :buffer<Space>term
@@ -143,6 +148,7 @@ if has('nvim')
   nmap <Leader>l :let @r = '(enter! ' . '"' . expand("%") . '")'<CR><C-l>"rpa<CR>
 
   set inccommand=nosplit
+  " let $VISUAL = 'nvr -cc split --remote-wait'
 endif
 
 function! s:Colors()
@@ -213,3 +219,37 @@ function! s:CafeLogs()
 endfunction
 
 command! -nargs=0 CafeLogs call s:CafeLogs()
+
+
+function! MyTabLine()
+  let s = ' '
+  for i in range(tabpagenr('$'))
+    " select the highlighting
+    if i + 1 == tabpagenr()
+      let s .= '%#TabLineSel#'
+    else
+      let s .= '%#TabLine#'
+    endif
+
+    " set the tab page number (for mouse clicks)
+    let s .= '%' . (i + 1) . 'T'
+
+    " the label is made by MyTabLabel()
+    let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
+  endfor
+
+  " after the last tab fill with TabLineFill and reset tab page nr
+  let s .= '%#TabLineFill#%T'
+
+  " right-align the label to close the current tab page
+  if tabpagenr('$') > 1
+    let s .= '%=%#TabLine#%999Xclose'
+  endif
+
+  return s
+endfunction
+
+function! MyTabLabel(n)
+  let winnr = tabpagewinnr(a:n)
+  return split(getcwd(winnr, a:n), '/')[-1]
+endfunction

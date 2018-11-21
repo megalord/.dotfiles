@@ -19,25 +19,39 @@ export TERM=xterm-256color
 export GOPATH="$HOME/.go"
 export PATH="$PATH:$HOME/.local/bin:$GOPATH/bin"
 
+export TILLER_NAMESPACE=tesla-staging
+
 export EDITOR=nvim
 
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
+alias oc-docs='open https://docs.openshift.org/1.5/welcome/index.html'
+
 oc-project () {
+  oc project | awk -F\" '{print $2}'
+}
+
+oc-open-project () {
   open $(oc project | awk -F\" '{print $4 "/console/project/" $2}')
 }
 
+oc-secret () {
+  oc get secrets/$1 -o json | jq -r ".data[\"$2\"]" | base64 -D
+}
+
+oc-events () {
+  if [ $# -eq 0 ];
+  then
+    query=''
+  else
+    query="?fieldSelector=involvedObject.name%3D$1"
+  fi
+  curl -sk -H "accept: application/json" -H "Authorization: Bearer $(oc whoami -t)" "$(oc project | awk -F\" '{print $4 "/api/v1/namespaces/" $2}')/events$query" | jq -r '.items[] | "\(.firstTimestamp) [\(.source.host)]: \(.message)"'
+}
+
 alias d='docker'
-alias dm='docker-machine'
 alias dc='docker-compose'
 alias d-clean-images='d images | grep "<none>" | awk "{print $3}" | xargs docker rmi'
-alias d-setup='eval $(dm env)'
-alias d-setup-local='
-export DOCKER_TLS_VERIFY="1"
-export DOCKER_HOST="tcp://localhost:2376"
-export DOCKER_CERT_PATH="/Users/jord7580/.docker/machine/machines/default"
-export DOCKER_MACHINE_NAME="default"
-'
 
 alias urldecode='python3 -c "import sys; from urllib.parse import unquote; print(unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()))"'
 alias urlencode='python3 -c "import sys; from urllib.parse import quote; print(quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()))"'
@@ -70,16 +84,23 @@ alias xc='xargs curl'
 
 alias rm-pyc='find . -name "*.pyc" -exec rm -rf {} \;'
 
-upstream-url () {
-  git remote -v | grep upstream | sed -n '2 p' | sed -e 's/.*@\(.*\)\.git.*/\1/' -e 's/:/\//' -e 's/^/https:\/\//'
+alias tf='terraform'
+
+repo-url () {
+  remotes=$(git remote -v | awk '{print $1}' | uniq)
+  remote="origin"
+  if [[ $remotes =~ "upstream" ]]; then
+    remote="upstream"
+  fi
+  git remote get-url $remote | sed -e 's/.*@\(.*\)\.git.*/\1/' -e 's/:/\//' -e 's/^/https:\/\//'
 }
 
 repo () {
-  open $(upstream-url)
+  open $(repo-url)
 }
 
 prs () {
-  open "$(upstream-url)/pulls"
+  open "$(repo-url)/pulls"
 }
 
 new-session () {
@@ -89,8 +110,10 @@ new-session () {
   tmux -2 attach-session -t $1
 }
 
+alias pystdlib='/usr/local/Cellar/python3/3.6.5/Frameworks/Python.framework/Versions/3.6/lib/python3.6'
+
 gostdlib () {
-  cd /usr/local/Cellar/go/1.8/libexec
+  cd /usr/local/Cellar/go/1.8/libexec/src
 }
 
 goimports () {
