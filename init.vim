@@ -13,31 +13,20 @@ Plug 'bling/vim-airline'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'docunext/closetag.vim'
 Plug 'godlygeek/tabular'
-Plug 'mileszs/ack.vim'
 
 " JS
-Plug 'kchmck/vim-coffee-script'
 Plug 'jelera/vim-javascript-syntax'
 Plug 'leafgarland/typescript-vim'
-Plug 'raichoo/purescript-vim'
-Plug 'FrigoEU/psc-ide-vim'
 
 " Web
 Plug 'elzr/vim-json'
 Plug 'groenewege/vim-less'
 
-" Haskell
-Plug 'neovimhaskell/haskell-vim'
-Plug 'Twinside/vim-hoogle'
-Plug 'eagletmt/ghcmod-vim'
-
 " Lisps
 Plug 'wlangstroth/vim-racket'
-Plug 'paredit.vim'
+"Plug 'paredit.vim'
 
 " Other langs
-Plug 'tpope/vim-rails'
-Plug 'derekwyatt/vim-scala'
 Plug 'hdima/python-syntax'
 Plug 'fatih/vim-go'
 
@@ -46,7 +35,6 @@ Plug 'tweekmonster/nvim-api-viewer'
 Plug 'neovim/node-host'
 
 " Style
-Plug 'tomasr/molokai'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'luochen1990/rainbow'
 
@@ -116,23 +104,6 @@ nnoremap ; :
 inoremap jk <ESC>
 
 
-
-" Haskell helpers
-
-" Show types in completion suggestions
-let g:necoghc_enable_detailed_browse = 1
-" Resolve ghcmod base directory
-au FileType haskell let g:ghcmod_use_basedir = getcwd()
-
-nnoremap <Leader>hh :Hoogle<CR>
-nnoremap <Leader>hH :Hoogle
-nnoremap <Leader>hi :HoogleInfo<CR>
-nnoremap <Leader>hI :HoogleInfo
-nnoremap <Leader>hz :HoogleClose<CR>
-nnoremap <Leader>ht :GhcModType<CR>
-nnoremap <Leader>hc :GhcModTypeClear<CR>
-
-
 " neovim
 if has('nvim')
   tnoremap jk <C-\><C-n>
@@ -143,9 +114,8 @@ if has('nvim')
 
   vmap <Leader>e y<C-l>p
   nmap <Leader>e vipy<C-l>p
-  nnoremap <Leader>t :e term://zsh<CR>
-  nnoremap <Leader>vt :vs term://zsh<CR>
-  nmap <Leader>l :let @r = '(enter! ' . '"' . expand("%") . '")'<CR><C-l>"rpa<CR>
+  nnoremap <Leader>t :e term://bash<CR>
+  nnoremap <Leader>vt :vs term://bash<CR>
 
   set inccommand=nosplit
   " let $VISUAL = 'nvr -cc split --remote-wait'
@@ -206,19 +176,6 @@ augroup jump_to_tags
 
   command! -nargs=0 Pulse call s:Pulse()
 augroup END
-
-function! s:CafeLogs()
-  execute '?Detailed logs'
-  normal f/
-  normal vj$hy
-  execute 'new'
-  normal pJx
-  normal 0y$
-  execute 'e! ' . @"
-  "normal Go
-endfunction
-
-command! -nargs=0 CafeLogs call s:CafeLogs()
 
 
 function! MyTabLine()
