@@ -50,7 +50,7 @@ function set_git_branch {
     return
   fi
 
-  if [[ ${git_status} =~ "working directory clean" ]]; then
+  if [[ ${git_status} =~ "working tree clean" ]]; then
     local state="${GREEN}"
   elif [[ ${git_status} =~ "Changes to be committed" ]]; then
     local state="${MAGENTA}"
