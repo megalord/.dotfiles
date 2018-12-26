@@ -1,11 +1,11 @@
 #!/bin/bash
-for f in $(find . -maxdepth 1 -type f); do
-  if [[ "$f" == "link.sh" ]]; then
-    continue
-  elif [[ "$f" == "init.vim" ]]; then
-    mkdir -p ~/.config/nvim
-    ln -s ~/.dotfiles/init.vim ~/.config/nvim/init.vim
-  else
-    ln -s ~/.dotfiles/$f ~/$f
-  fi
+for f in $(find . -maxdepth 1 -type f -name '.*'); do
+  ln -s ~/.dotfiles/$f ~/$f
 done
+
+mkdir -p ~/.config
+for f in $(cd config && find . -mindepth 1 -maxdepth 1); do
+  ln -s ~/.dotfiles/config/$f ~/.config/$f
+done
+
+sudo dnf install $(grep '^[^#]' packages)

@@ -6,7 +6,8 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # User specific environment
-export PATH="$HOME/.local/bin:$PATH"
+export GOPATH="$HOME/.go"
+export PATH="$HOME/.local/bin:$PATH:$GOPATH/bin"
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
@@ -17,6 +18,8 @@ for f in ~/.bashrc.*; do
 done
 
 set -o vi
+shopt -s globstar
+unset command_not_found_handle
 
 export TILLER_NAMESPACE=tesla-staging
 
@@ -63,7 +66,7 @@ for val in parse_qs(urlparse(sys.stdin.read()).query).get(sys.argv[1], []):
   print(val)
 "'
 
-export NVM_DIR="/Users/jord7580/.nvm"
+export NVM_DIR="$HOME/.nvm"
 alias nvm-setup='[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"'  # This loads nvm
 
 # tmux
@@ -100,10 +103,10 @@ function new-session () {
   tmux -2 attach-session -t $1
 }
 
-alias pystdlib='/usr/lib64/python3.7'
+alias pystdlib='cd /usr/lib64/python3.7'
 
 function gostdlib () {
-  cd /usr/local/Cellar/go/1.8/libexec/src
+  cd /usr/lib/golang/src
 }
 
 function goimports () {
