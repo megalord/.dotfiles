@@ -42,9 +42,19 @@ end
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/lovelace/theme.lua")
+local sidebar = require("sidebar")
+local exit_screen_show = require("exit_screen")
+
+-- ~~ Noodle Cleanup Script ~~
+-- Some of my widgets (mpd, volume) rely on scripts that have to be
+-- run persistently in the background.
+-- They sleep until mpd/volume state changes, in an infinite loop.
+-- As a result when awesome restarts, they keep running in background, along with the new ones that are created after the restart.
+-- This script cleans up the old processes.
+awful.spawn.with_shell("~/.config/awesome/awesome-cleanup.sh")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xterm"
+terminal = "alacritty"
 editor = os.getenv("EDITOR") or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -164,15 +174,7 @@ local tasklist_buttons = gears.table.join(
                                           end))
 
 local function set_wallpaper(s)
-    -- Wallpaper
-    if beautiful.wallpaper then
-        local wallpaper = beautiful.wallpaper
-        -- If wallpaper is a function, call it with the screen
-        if type(wallpaper) == "function" then
-            wallpaper = wallpaper(s)
-        end
-        gears.wallpaper.maximized(wallpaper, s, true)
-    end
+    gears.wallpaper.maximized(os.getenv("HOME") .. "/Pictures/wallhaven-714256.jpg", s, true)
 end
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
@@ -331,7 +333,11 @@ globalkeys = gears.table.join(
               {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
+              {description = "show the menubar", group = "launcher"}),
+
+    -- Custom
+    awful.key({ modkey }, "`", function() sidebar.visible = not sidebar.visible end),
+    awful.key({ modkey }, "Escape", exit_screen_show)
 )
 
 clientkeys = gears.table.join(
