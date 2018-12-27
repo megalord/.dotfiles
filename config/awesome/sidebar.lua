@@ -148,6 +148,42 @@ local volume = wibox.widget{
   layout = wibox.layout.align.horizontal
 }
 
+-- Create a launcher widget and a main menu
+local myawesomemenu = {
+   { "hotkeys", function() return false, hotkeys_popup.show_help end},
+   { "manual", terminal .. " -e man awesome" },
+   { "edit config", editor_cmd .. " " .. awesome.conffile },
+   { "restart", awesome.restart },
+   { "quit", function() awesome.quit() end}
+}
+
+mymainmenu = awful.menu({ items = {
+  { "terminal", terminal, beautiful.terminal_icon },
+  { "firefox", os.getenv("HOME") .. "/.opt/firefox-dev/firefox", beautiful.firefox_icon },
+  { "files", "nautilus", beautiful.files_icon },
+  { "slack", "slack", "/usr/share/pixmaps/slack.png" },
+  { "awesome", myawesomemenu, beautiful.awesome_icon }
+}})
+
+local mylauncher = awful.widget.launcher({
+  image = beautiful.awesome_icon,
+  menu = mymainmenu
+})
+mylauncher.forced_width = 60
+mylauncher.forced_height = 60
+
+-- Create an imagebox widget which will contain an icon indicating which layout we're using.
+local mylayoutbox = awful.widget.layoutbox(s)
+mylayoutbox:buttons(gears.table.join(
+                     awful.button({ }, 1, function () awful.layout.inc( 1) end),
+                     awful.button({ }, 3, function () awful.layout.inc(-1) end),
+                     awful.button({ }, 4, function () awful.layout.inc( 1) end),
+                     awful.button({ }, 5, function () awful.layout.inc(-1) end)))
+mylayoutbox:set_forced_width(60)
+mylayoutbox:set_forced_height(60)
+
+local mypromptbox = awful.widget.prompt()
+
 local sidebar = awful.wibar({
   position = "left",
   screen = s,
@@ -159,6 +195,8 @@ local sidebar = awful.wibar({
 
 sidebar.bg = beautiful.sidebar_bg or beautiful.wibar_bg or "#111111"
 sidebar.fg = beautiful.sidebar_fg or beautiful.wibar_fg or "#FFFFFF"
+
+sidebar.promptbox = mypromptbox
 
 sidebar:setup({
   {
@@ -175,6 +213,17 @@ sidebar:setup({
     ram,
     battery,
     pad(1),
+    layout = wibox.layout.fixed.vertical
+  },
+  pad(0),
+  {
+    sidebar.promptbox,
+    {
+      mylayoutbox,
+      pad(5),
+      mylauncher,
+      layout = wibox.layout.align.horizontal
+    },
     layout = wibox.layout.fixed.vertical
   },
   layout = wibox.layout.align.vertical
