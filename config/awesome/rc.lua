@@ -63,11 +63,13 @@ editor_cmd = terminal .. " -e " .. editor
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
 
+local brightness_bar = require("brightness_bar")
 local sidebar = require("sidebar")
 local exit_screen_show = require("exit_screen")
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
+    awful.layout.suit.max,
     awful.layout.suit.tile,
     awful.layout.suit.floating,
     -- awful.layout.suit.tile.left,
@@ -77,7 +79,6 @@ awful.layout.layouts = {
     -- awful.layout.suit.fair.horizontal,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
     -- awful.layout.suit.max.fullscreen,
     -- awful.layout.suit.magnifier,
     -- awful.layout.suit.corner.nw,
@@ -228,7 +229,24 @@ globalkeys = gears.table.join(
 
     -- Custom
     awful.key({ modkey }, "`", function() sidebar.visible = not sidebar.visible end),
-    awful.key({ modkey }, "Escape", exit_screen_show)
+    awful.key({ modkey }, "Escape", exit_screen_show),
+    awful.key({        }, "XF86MonBrightnessDown", function()
+      awful.spawn.with_shell("xbacklight -dec 5")
+      brightness_bar:update()
+    end),
+    awful.key({        }, "XF86MonBrightnessUp", function()
+      awful.spawn.with_shell("xbacklight -inc 5")
+      brightness_bar:update()
+    end),
+    awful.key({        }, "XF86AudioMute", function()
+      awful.spawn.with_shell("pactl set-sink-mute @DEFAULT_SINK@ toggle")
+    end),
+    awful.key({        }, "XF86AudioLowerVolume", function()
+      awful.spawn.with_shell("pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ -5%")
+    end),
+    awful.key({        }, "XF86AudioRaiseVolume", function()
+      awful.spawn.with_shell("pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ +5%")
+    end)
 )
 
 clientkeys = gears.table.join(

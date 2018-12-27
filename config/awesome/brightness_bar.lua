@@ -32,8 +32,12 @@ end
 
 local brightness_script = [[
   bash -c '
-  bc <<< "scale=2; `cat /sys/class/backlight/acpi_video0/brightness`/`cat /sys/class/backlight/acpi_video0/max_brightness`"
+  bc <<< "scale=2; `cat /sys/class/backlight/intel_backlight/brightness`/`cat /sys/class/backlight/intel_backlight/max_brightness`"
   ']]
+
+function brightness_bar:update()
+  update_widget(awful.spawn.with_shell(brightness_script))
+end
 
 awful.widget.watch(brightness_script, update_interval, function(widget, stdout) update_widget(stdout) end)
 
