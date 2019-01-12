@@ -1,7 +1,13 @@
+#core
 awesome
+compton
+neovim
+slock
+xbacklight
+xclip
+#progs
 cmus
 docker-ce
 jq
+#langs
 nodejs
-slock
-xbacklight

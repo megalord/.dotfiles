@@ -58,7 +58,7 @@ set ls=2
 hi Normal ctermbg=233
 colorscheme space-vim-dark " Modify the plugin source to use ctermbg 233 on line 83
 hi Comment cterm=italic
-hi Normal guibg=None ctermbg=None
+hi Normal guibg=None ctermbg=None ctermfg=253
 set nohlsearch
 
 set smartindent

@@ -25,3 +25,5 @@
 	insteadOf = git://github.com/
 [url "https://github.com/"]
 	insteadOf = git://github.com/
+[url "git@github.rackspace.com:"]
+	insteadOf = https://github.rackspace.com/
