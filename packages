@@ -11,3 +11,6 @@ docker-ce
 jq
 #langs
 nodejs
+#other
+aspell
+aspell-en

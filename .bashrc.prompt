@@ -95,7 +95,7 @@ function set_bash_prompt () {
   set_git_branch
 
   # Set the bash prompt variable.
-  PS1="${LIGHT_BLUE}${PWD#"${PWD%/*/*}/"}${COLOR_NONE}${BRANCH} ${PROMPT_SYMBOL} "
+  PS1="${LIGHT_BLUE}${PWD#"$HOME/"}${COLOR_NONE}${BRANCH}\n${PROMPT_SYMBOL} "
 }
 
 # Tell bash to execute this function just before displaying its prompt.

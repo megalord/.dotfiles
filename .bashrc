@@ -23,6 +23,7 @@ unset command_not_found_handle
 
 export TILLER_NAMESPACE=tesla-staging
 
+export HISTSIZE=10000
 export EDITOR=nvim
 
 alias oc-docs='xdg-open https://docs.okd.io/3.6'

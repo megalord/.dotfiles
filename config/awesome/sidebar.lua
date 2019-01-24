@@ -162,6 +162,7 @@ mymainmenu = awful.menu({ items = {
   { "firefox", os.getenv("HOME") .. "/.opt/firefox-dev/firefox", beautiful.firefox_icon },
   { "files", "nautilus", beautiful.files_icon },
   { "slack", "slack", "/usr/share/pixmaps/slack.png" },
+  { "discord", os.getenv("HOME") .. "/.opt/Discord/Discord", os.getenv("HOME") .. "/.opt/Discord/discord.png" },
   { "awesome", myawesomemenu, beautiful.awesome_icon }
 }})
 
