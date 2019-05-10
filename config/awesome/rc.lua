@@ -126,7 +126,7 @@ end)
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-    awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
+    awful.key({ modkey,           }, "h",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
@@ -246,6 +246,9 @@ globalkeys = gears.table.join(
     end),
     awful.key({        }, "XF86AudioRaiseVolume", function()
       awful.spawn.with_shell("pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ +5%")
+    end),
+    awful.key({ modkey }, "s", function()
+      awful.spawn.with_shell("sleep 0.5; gnome-screenshot -a")
     end)
 )
 

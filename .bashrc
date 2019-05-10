@@ -80,6 +80,10 @@ alias rm-pyc='find . -name "*.pyc" -exec rm -rf {} \;'
 
 alias tf='terraform'
 
+alias nonewline='perl -pi -e "chomp if eof"'
+alias myip=$'ifconfig -a wlp2s0 | grep "inet " | awk \'{print $2}\''
+alias copy='xclip -selection clipboard'
+
 function repo-url () {
   remotes=$(git remote -v | awk '{print $1}' | uniq)
   remote="origin"
@@ -113,3 +117,5 @@ function gostdlib () {
 function goimports () {
   go list -f '{{join .Imports "\n"}}' $@ | sort | uniq
 }
+
+source ~/.raxrc
