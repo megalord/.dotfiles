@@ -1,4 +1,8 @@
-#!/bin/bash -e
+#!/bin/bash
+
+# aspell aspell-en cmus ctags docker jq
+packages_wanted=(firefox-developer-edition fzf git htop neovim openssh sway termite upower wl-clipboard)
+aur_wanted=(bitwise)
 
 message() {
   printf '\n'
@@ -55,8 +59,6 @@ done
 
 message "Packages"
 
-# aspell aspell-en cmus ctags docker-ce jq
-packages_wanted=(fzf git neovim openssh sway termite wl-clipboard)
 packages_needed=''
 for p in $packages_wanted; do
   pacman -Q $p > /dev/null
@@ -65,10 +67,29 @@ for p in $packages_wanted; do
   fi
 done
 if [ ! -z "$packages_needed" ]; then
-  echo "Found missing packages: $packages_needed\nInstalling..."
+  echo "Found missing packages: $packages_needed"
+  echo "Installing..."
   sudo pacman -S $packages_needed
 else
   echo "All packages installed"
+fi
+
+aur_needed=''
+for p in $aur_wanted; do
+  pacman -Q $p > /dev/null
+  if [ $? != 0 ]; then
+    aur_needed="$aur_needed $p"
+  fi
+done
+if [ ! -z "$aur_needed" ]; then
+  echo "Found missing AUR packages: $aur_needed"
+  echo "Installing..."
+  for p in $aur_needed; do
+    git clone https://aur.archlinux.org/$p.git $HOME/.aur/$p
+    (cd $HOME/.aur/$p && makepkg -si)
+  done
+else
+  echo "All AUR packages installed"
 fi
 
 printf "Installing vim-plug... "
