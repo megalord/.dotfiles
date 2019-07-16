@@ -23,8 +23,6 @@ set -o vi
 shopt -s globstar
 unset command_not_found_handle
 
-export TILLER_NAMESPACE=tesla-staging
-
 export HISTSIZE=10000
 export EDITOR=nvim
 
@@ -119,5 +117,3 @@ function gostdlib () {
 function goimports () {
   go list -f '{{join .Imports "\n"}}' $@ | sort | uniq
 }
-
-source ~/.raxrc
