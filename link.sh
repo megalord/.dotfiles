@@ -1,20 +1,20 @@
 #!/bin/bash
 
-CONFIG="~/.config"
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
-for f in $(find . -maxdepth 1 -type f -name '.*'); do
-  ln -s $PWD/$f ~/$f
+for f in $(cd $SCRIPTPATH && find . -maxdepth 1 -type f -name '.*' -printf '%P\n'); do
+  ln -sf $SCRIPTPATH/$f ~/$f
 done
 
 mkdir -p ~/.config
-for f in $(cd config && find . -mindepth 1 -maxdepth 1); do
-  ln -s $PWD/config/$f $CONFIG/$f
+for d in $(cd $SCRIPTPATH/config && find * -maxdepth 0 -type d); do
+  ln -sf $SCRIPTPATH/config/$d ~/.config/$d
 done
 
-if [ ! -d elenapan-dotfiles ]; then
+if [ ! -d $SCRIPTPATH/elenapan-dotfiles ]; then
   git clone https://github.com/elenapan/dotfiles elenapan-dotfiles
-  ln -s $PWD/elenapan-dotfiles/config/awesome/themes/lovelace $PWD/config/awesome/themes/lovelace
-  ln -s $PWD/elenapan-dotfiles/config/awesome/noodle $PWD/config/awesome/noodle
+  ln -sf $PWD/elenapan-dotfiles/config/awesome/themes/lovelace $PWD/config/awesome/themes/lovelace
+  ln -sf $PWD/elenapan-dotfiles/config/awesome/noodle $PWD/config/awesome/noodle
 fi
 
-sudo dnf install $(grep '^[^#]' packages)
+#sudo dnf install $(grep '^[^#]' packages)

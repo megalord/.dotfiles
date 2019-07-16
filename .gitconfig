@@ -19,11 +19,11 @@
 	excludesfile = /Users/jord7580/.gitignore_global
 [push]
 	default = current
-[url "ssh://git@github.com/"]
-	insteadOf = https://github.com/
-[url "ssh://git@github.com/"]
-	insteadOf = git://github.com/
-[url "https://github.com/"]
-	insteadOf = git://github.com/
-[url "git@github.rackspace.com:"]
-	insteadOf = https://github.rackspace.com/
+#[url "ssh://git@github.com/"]
+#	insteadOf = https://github.com/
+#[url "ssh://git@github.com/"]
+#	insteadOf = git://github.com/
+#[url "https://github.com/"]
+#	insteadOf = git://github.com/
+#[url "git@github.rackspace.com:"]
+#	insteadOf = https://github.rackspace.com/

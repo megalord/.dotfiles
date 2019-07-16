@@ -159,10 +159,9 @@ local myawesomemenu = {
 
 mymainmenu = awful.menu({ items = {
   { "terminal", terminal, beautiful.terminal_icon },
-  { "firefox", os.getenv("HOME") .. "/.opt/firefox-dev/firefox", beautiful.firefox_icon },
-  { "files", "nautilus", beautiful.files_icon },
+  { "firefox", "/usr/bin/firefox-developer-edition", beautiful.firefox_icon },
   { "slack", "slack", "/usr/share/pixmaps/slack.png" },
-  { "discord", os.getenv("HOME") .. "/.opt/Discord/Discord", os.getenv("HOME") .. "/.opt/Discord/discord.png" },
+  --{ "discord", os.getenv("HOME") .. "/.opt/Discord/Discord", os.getenv("HOME") .. "/.opt/Discord/discord.png" },
   { "awesome", myawesomemenu, beautiful.awesome_icon }
 }})
 

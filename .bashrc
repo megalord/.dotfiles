@@ -17,6 +17,8 @@ for f in ~/.bashrc.*; do
   . $f
 done
 
+. /usr/share/git/completion/git-completion.bash
+
 set -o vi
 shopt -s globstar
 unset command_not_found_handle
@@ -54,9 +56,9 @@ alias dc='docker-compose'
 alias d-clean-images='d images | grep "<none>" | awk "{print $3}" | xargs docker rmi'
 
 alias urldecode='python3 -c "import sys; from urllib.parse import unquote; print(unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()))"'
-alias urlencode='python3 -c "import sys; from urllib.parse import quote; print(quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()))"'
+alias urlencode='python3 -c "import sys; from urllib.parse import quote_plus; print(quote_plus(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()))"'
 alias inflate='python3 -c "import sys, zlib; print(zlib.decompress(sys.stdin.buffer.read(), -15).decode(\"utf-8\"))"'
-alias deflate='python3 -c "import sys, zlib; print(zlib.compress(sys.stdin.buffer.read())[2:-4])"'
+alias deflate='python3 -c "import sys, zlib; sys.stdout.buffer.write(zlib.compress(sys.stdin.buffer.read())[2:-4])"'
 function header () {
   grep -i $1 | sed -e 's/[^:]*: \(.*\)/\1/'
 }

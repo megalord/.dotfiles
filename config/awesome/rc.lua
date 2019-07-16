@@ -207,10 +207,7 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function ()
-                                                sidebar.visible = true
-                                                sidebar.promptbox:run()
-                                              end,
+    awful.key({ modkey },            "r",     function () awful.spawn.with_shell("dmenu_run -l 5") end,
               {description = "run prompt", group = "launcher"}),
 
     awful.key({ modkey }, "x",
@@ -248,7 +245,7 @@ globalkeys = gears.table.join(
       awful.spawn.with_shell("pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ +5%")
     end),
     awful.key({ modkey }, "s", function()
-      awful.spawn.with_shell("sleep 0.5; gnome-screenshot -a")
+      awful.spawn.with_shell("maim --select ~/Pictures/$(date +%s).png")
     end)
 )
 

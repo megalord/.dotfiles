@@ -32,7 +32,7 @@ Plug 'wlangstroth/vim-racket'
 
 " Other langs
 Plug 'hdima/python-syntax'
-Plug 'fatih/vim-go'
+"Plug 'fatih/vim-go'
 
 " rplugins
 Plug 'tweekmonster/nvim-api-viewer'
@@ -88,7 +88,7 @@ let mapleader=","
 set wildignore+=*.o
 let g:ctrlp_map = '<leader>f'
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|bower_components|\.git|vendor|build|coverage|report|compiled|dist|tmp|output|\.o)$'
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|bower_components|\.git|build|coverage|report|compiled|dist|tmp|output|\.o)$'
 
 let g:paredit_electric_return = 0
 
@@ -114,6 +114,8 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 nnoremap ; :
 inoremap jk <ESC>
+" No Ex mode
+nnoremap Q <Nop>
 
 
 " neovim
@@ -146,10 +148,10 @@ function! SetLSPShortcuts()
   nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
 endfunction()
 
-augroup LSP
-  autocmd!
-  autocmd FileType java call SetLSPShortcuts()
-augroup END
+"augroup LSP
+"  autocmd!
+"  autocmd FileType java call SetLSPShortcuts()
+"augroup END
 
 function! s:Colors()
   let num = 255
