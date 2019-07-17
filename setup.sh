@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # aspell aspell-en cmus ctags docker jq
-packages_wanted=(firefox-developer-edition fzf git htop neovim openssh sway termite upower wl-clipboard)
+packages_wanted=(firefox-developer-edition fzf git htop neofetch neovim openssh sway termite upower waybar wl-clipboard)
 aur_wanted=(bitwise)
 
 message() {
@@ -22,7 +22,7 @@ message() {
   printf '\n'
 }
 
-groups | grep wheel > /dev/null
+groups | grep wheel >/dev/null
 if [ $? != 0 ]; then
   echo "$USER is not part of wheel group\nrun 'usermod -aG wheel $USER' as root"
   exit 1
@@ -57,11 +57,16 @@ for f in $(find $base/config -mindepth 1 -maxdepth 1); do
   fi
 done
 
+if [ ! -f "/usr/share/backgrounds/arch-faded.jpg" ]; then
+  curl https://i.pinimg.com/originals/86/27/3c/86273cca81c59e5f55db1338e820e1f7.jpg -sfLo arch-faded.jpg
+  sudo mv arch-faded.jpg /usr/share/backgrounds/arch-faded.jpg
+fi
+
 message "Packages"
 
 packages_needed=''
-for p in $packages_wanted; do
-  pacman -Q $p > /dev/null
+for p in ${packages_wanted[@]}; do
+  pacman -Q $p >/dev/null 2>/dev/null
   if [ $? != 0 ]; then
     packages_needed="$packages_needed $p"
   fi
@@ -75,8 +80,8 @@ else
 fi
 
 aur_needed=''
-for p in $aur_wanted; do
-  pacman -Q $p > /dev/null
+for p in ${aur_wanted[@]}; do
+  pacman -Q $p >/dev/null 2>/dev/null
   if [ $? != 0 ]; then
     aur_needed="$aur_needed $p"
   fi
