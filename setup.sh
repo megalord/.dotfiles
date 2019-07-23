@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # aspell aspell-en cmus ctags docker jq
-packages_wanted=(firefox-developer-edition fzf git htop neofetch neovim openssh sway termite upower waybar wl-clipboard)
+desktop=(grim slurp sway upower waybar wl-clipboard)
+progs=(firefox-developer-edition fzf git htop jq mpv neofetch neovim openssh termite tig tmux youtube-dl)
+packages_wanted=(${desktop[*]} ${progs[*]})
 aur_wanted=(bitwise)
 
 message() {
@@ -58,8 +60,9 @@ for f in $(find $base/config -mindepth 1 -maxdepth 1); do
 done
 
 if [ ! -f "/usr/share/backgrounds/arch-faded.jpg" ]; then
+  curl https://i.imgur.com/W6dZUwY.jpg -sfLo misty.png
   curl https://i.pinimg.com/originals/86/27/3c/86273cca81c59e5f55db1338e820e1f7.jpg -sfLo arch-faded.jpg
-  sudo mv arch-faded.jpg /usr/share/backgrounds/arch-faded.jpg
+  sudo mv arch-faded.jpg misty.png /usr/share/backgrounds/
 fi
 
 message "Packages"
